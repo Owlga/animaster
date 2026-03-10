@@ -122,6 +122,24 @@ function animaster() {
         }
     }
 
+    function resetFadeIn(element) {
+        element.style.transitionDuration = null;
+        fadeOut(element, 0);
+    }
+
+    
+    function resetFadeOut(element) {
+        element.style.transitionDuration = null;
+        fadeIn(element, 0);
+    }
+
+    function resetMoveAndScale() {
+        element.style.transitionDuration = null;
+        element.style.transform = null;
+        element.style.transitionDuration =  null;
+        element.style.transform = null;
+    }
+
     return {fadeIn, move, scale, fadeOut, moveAndHide, showAndHide, heartBeat}
 }
 
