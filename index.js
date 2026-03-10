@@ -1,7 +1,8 @@
 addListeners();
 
 function addListeners() {
-    let stopFunc;
+    let stopFuncHeart;
+    let stopFuncHide;
     document.getElementById('fadeInPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('fadeInBlock');
@@ -29,7 +30,14 @@ function addListeners() {
     document.getElementById('moveAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveAndHideBlock');
-            animaster().moveAndHide(block, 1000)
+            stopFuncHide = animaster().moveAndHide(block, 3000).stop;
+        });
+
+    document.getElementById('moveAndHideStop')
+        .addEventListener('click', function () {
+            if (stopFuncHide !== undefined) {
+                stopFuncHide();
+            }
         });
 
     document.getElementById('showAndHidePlay')
@@ -41,14 +49,14 @@ function addListeners() {
     document.getElementById('heartBeatingPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
-            stopFunc = animaster().heartBeat(block, 3000).stop;
+            stopFuncHeart = animaster().heartBeat(block, 3000).stop;
         });
 
     document.getElementById('heartBeatingStop')
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
-            if (stopFunc !== undefined) {
-                stopFunc();
+            if (stopFuncHeart !== undefined) {
+                stopFuncHeart();
             }
         });
 }
@@ -98,9 +106,18 @@ function animaster() {
         element.style.transform = getTransform(null, ratio);
     }
 
+
     function moveAndHide(element, duration){
         move(element, duration * 0.4, {x: 100, y: 20});
-        setTimeout(() => fadeOut(element, duration * 0.6), duration * 0.4);
+        let tId = setTimeout(() => fadeOut(element, duration * 0.6), duration * 0.4);
+        return {
+            stop() {
+                clearTimeout(tId);
+                resetFadeOut(element);
+                resetMoveAndScale(element);
+                console.log("stopped");
+            }
+        }
     }
 
     function showAndHide(element, duration) {
@@ -133,7 +150,7 @@ function animaster() {
         fadeIn(element, 0);
     }
 
-    function resetMoveAndScale() {
+    function resetMoveAndScale(element) {
         element.style.transitionDuration = null;
         element.style.transform = null;
         element.style.transitionDuration =  null;
